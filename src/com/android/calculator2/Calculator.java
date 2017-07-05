@@ -328,7 +328,7 @@ public abstract class Calculator extends Activity
                     // show an explanation to the user
                     // Good practise: don't block thread after the user sees the explanation, try again to request the permission.
                 } else {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, 200);
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
                     // The callback method gets the result of the request.
                 }
             } else {
@@ -375,17 +375,17 @@ public abstract class Calculator extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data!=null) {
+            progress = new ProgressDialog(this);
+            progress.setTitle("Extracting file from folder.");
+            progress.setMessage("Wait while loading...");
+            progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+            progress.show();
 
-        progress = new ProgressDialog(this);
-        progress.setTitle("Extracting file from folder.");
-        progress.setMessage("Wait while loading...");
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-        progress.show();
-
-        Intent mServiceIntent = new Intent(getApplicationContext(), CalculatorHandler.class);
-        mServiceIntent.setData(data.getData());
-        getApplicationContext().startService(mServiceIntent);
-
+            Intent mServiceIntent = new Intent(getApplicationContext(), CalculatorHandler.class);
+            mServiceIntent.setData(data.getData());
+            getApplicationContext().startService(mServiceIntent);
+        }
     }
 
     private void onDelete() {
